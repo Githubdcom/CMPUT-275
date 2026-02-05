@@ -1,25 +1,22 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-if [ $# -lt 1 ]; then
-  echo "Usage: $0 <test-set-file>" >&2
-  exit 1
+# (a) No argument → usage message to stderr
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <test set file>" >&2
+    exit 1
 fi
 
 testset="$1"
 
-if [ ! -r "$testset" ]; then
-  echo "Error: cannot read test set file '$testset'" >&2
-  exit 1
-fi
-
-while IFS= read -r line; do
-  for stem in $line; do
+# Read each stem (whitespace-separated)
+for stem in $(cat "$testset"); do
     echo "Description for test case $stem:"
-    desc="${stem}.desc"
-    if [ -f "$desc" ]; then
-      cat "$desc"
+
+    descfile="$stem.desc"
+
+    if [ -f "$descfile" ]; then
+        cat "$descfile"
     else
-      echo "$stem No test description"
+        echo "$stem: No test description"
     fi
-  done
-done < "$testset"
+done
