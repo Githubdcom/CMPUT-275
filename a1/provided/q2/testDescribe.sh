@@ -17,6 +17,6 @@ for stem in $(cat "$testset"); do
     if [ -f "$descfile" ]; then
         cat "$descfile"
     else
-        echo "$stem: No test description"
+        echo "$stem No test description"
     fi
 done
