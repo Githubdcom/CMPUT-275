@@ -1,0 +1,10 @@
+r a nowhitespace
+p a
+d a
+r b "read with whitespace"
+p b
+d b
+r c abcd
+pc
+dc
+q
