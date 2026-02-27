@@ -108,12 +108,18 @@ static void s_print(const SString *s) {
 }
 
 static void s_detail(const SString *s) {
-    putchar('"');
+    /* Line 1: String: "<contents>" */
+    printf("String: \"");
     for (unsigned int i = 0; i < s->len; i++) {
         putchar(s->data[i]);
     }
-    putchar('"');
-    printf(" %u %u\n", s->len, s->cap);
+    printf("\"\n");
+
+    /* Line 2: Length: <len> */
+    printf("Length: %u\n", s->len);
+
+    /* Line 3: Capacity: <cap> */
+    printf("Capacity: %u\n", s->cap);
 }
 
 static void s_assign_concat(SString *dest, const SString *x, const SString *y) {
