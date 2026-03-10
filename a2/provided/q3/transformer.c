@@ -6,7 +6,6 @@ typedef struct {
 } Pixel;
 
 static void die(void) {
-    /* spec says we don't need to replicate error messages */
     exit(1);
 }
 
@@ -40,21 +39,23 @@ static Pixel *read_ppm_p3(int *w, int *h) {
     return pix;
 }
 
+
+
+
 static void write_ppm_p3(int w, int h, const Pixel *pix) {
     printf("P3\n");
     printf("%d %d\n", w, h);
     printf("255\n");
 
-    long long n = (long long)w * (long long)h;
-    for (long long i = 0; i < n; i++) {
-        printf("%d %d %d", pix[i].r, pix[i].g, pix[i].b);
-        if ((i + 1) % w == 0) {
-            putchar('\n');
-        } else {
-            putchar(' ');
+    for (int row = 0; row < h; row++) {
+        for (int col = 0; col < w; col++) {
+            const Pixel *p = &pix[row * w + col];
+            printf("%d %d %d ", p->r, p->g, p->b);
         }
+        putchar('\n'); /* newline after every row, including last */
     }
 }
+
 
 static void flip_horizontal(int w, int h, Pixel *pix) {
     for (int row = 0; row < h; row++) {
@@ -83,19 +84,18 @@ static void apply_sepia(int w, int h, Pixel *pix) {
         int G = pix[i].g;
         int B = pix[i].b;
 
-        /* use scaled integers to avoid math.h:
-           floor(R*0.393 + G*0.769 + B*0.189)
-           = floor((393R + 769G + 189B) / 1000)
-        */
-        int newR = (393 * R + 769 * G + 189 * B) / 1000;
-        int newG = (349 * R + 686 * G + 168 * B) / 1000;
-        int newB = (272 * R + 534 * G + 131 * B) / 1000;
+        int newR = (int)(R * 0.393 + G * 0.769 + B * 0.189);
+        int newG = (int)(R * 0.349 + G * 0.686 + B * 0.168);
+        int newB = (int)(R * 0.272 + G * 0.534 + B * 0.131);
 
         pix[i].r = clamp255(newR);
         pix[i].g = clamp255(newG);
         pix[i].b = clamp255(newB);
     }
 }
+
+
+
 
 int main(int argc, char **argv) {
     int do_flip = 0;
@@ -107,7 +107,6 @@ int main(int argc, char **argv) {
         } else if (argv[i][0] == '-' && argv[i][1] == 's' && argv[i][2] == '\0') {
             do_sepia = 1;
         } else {
-            /* ignore unknown flags or treat as error; sample will define */
             die();
         }
     }
