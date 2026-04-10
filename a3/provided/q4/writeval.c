@@ -42,31 +42,33 @@ void *writeValue(void *writeLoc, const char *type, void *payload) {
 
     return payloadLoc + payloadSize;
 }
-
 void printValues(void *dataStart) {
     void *cur = dataStart;
+    int index = 0;
 
     while (*(unsigned char *)cur != 0xFF) {
         unsigned char tag = *(unsigned char *)cur;
 
         if (tag == 0) {
             void *payloadLoc = nextAlignedAddress(cur + 1, sizeof(int));
-            printf("%d\n", *(int *)payloadLoc);
+            printf("Value %d at %p: %d\n", index, cur, *(int *)payloadLoc);
             cur = payloadLoc + sizeof(int);
         } else if (tag == 1) {
             void *payloadLoc = cur + 1;
-            printf("%c\n", *(char *)payloadLoc);
+            printf("Value %d at %p: '%c'\n", index, cur, *(char *)payloadLoc);
             cur = payloadLoc + sizeof(char);
         } else if (tag == 2) {
             void *payloadLoc = nextAlignedAddress(cur + 1, sizeof(void *));
-            printf("%p\n", *(void **)payloadLoc);
+            printf("Value %d at %p: %p\n", index, cur, *(void **)payloadLoc);
             cur = payloadLoc + sizeof(void *);
         } else if (tag == 3) {
             void *payloadLoc = cur + 1;
-            printf("%s\n", (char *)payloadLoc);
+            printf("Value %d at %p: \"%s\"\n", index, cur, (char *)payloadLoc);
             cur = payloadLoc + strlen((char *)payloadLoc) + 1;
         } else {
             break;
         }
+
+        index++;
     }
 }
