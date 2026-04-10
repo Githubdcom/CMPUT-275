@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <stddef.h>
 
 void *nextAlignedAddress(void *faddr, size_t size) {
-  // TODO
+    size_t addr = (size_t)faddr;
+    size_t aligned = (addr + size - 1) / size * size;
+    return (void *)aligned;
 }
 
 
