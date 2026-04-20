@@ -1,0 +1,21 @@
+#!/bin/bash
+
+keyToStr() {
+  if [ $1 -eq 0 ]; then
+    echo "int"
+  elif [ $1 -eq 1 ]; then
+    echo "str"
+  elif [ $1 -eq 2 ]; then
+    echo "float"
+  fi
+}
+
+
+for key in 0 1 2; do
+  for val in 0 1 2; do
+    keyType=$(keyToStr ${key})
+    valType=$(keyToStr ${val})
+    execName=${keyType}To${valType^}
+    g++ -std=c++17 -Wall -Werror -DKTYPE=${key} -DVTYPE=${val} main.cc -o ${execName}
+  done
+done

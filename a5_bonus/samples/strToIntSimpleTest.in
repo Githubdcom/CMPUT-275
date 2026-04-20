@@ -1,0 +1,9 @@
+p
+s hello 22
+p
+f hello
+f foo
+r hello
+r bar
+p
+q

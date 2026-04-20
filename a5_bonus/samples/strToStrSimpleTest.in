@@ -1,0 +1,9 @@
+p
+s hello woot
+p
+f hello
+f foo
+r hello
+r bar
+p
+q
