@@ -114,9 +114,11 @@ bool intSet::operator==(const intSet &other) const {
 
 intSet intSet::operator|(const intSet &other) const {
   intSet out;
+
   // optional: reduce reallocs by pre-growing once
-  while (out.capacity < size + other.size) {
-    int newCap = out.capacity * 2;
+  int needed = size + other.size;
+  while (out.capacity < needed) {
+    int newCap = (out.capacity == 0 ? 4 : out.capacity * 2);
     int *newData = new int[newCap];
     for (int i = 0; i < out.size; ++i) newData[i] = out.data[i];
     delete[] out.data;

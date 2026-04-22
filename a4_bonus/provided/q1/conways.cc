@@ -19,9 +19,7 @@ class Board {
   }
 
   static void rtrimSpaces(string &s) {
-    while (!s.empty() && (s.back() == ' ' || s.back() == '\t')) {
-      s.pop_back();
-    }
+    while (!s.empty() && (s.back() == ' ' || s.back() == '\t')) s.pop_back();
   }
 
   int countNeighbors(int r, int c) const {
@@ -59,6 +57,7 @@ public:
       if ((int)line.size() != newCols) {
         for (int i = 0; i < newRows; ++i) delete[] newGrid[i];
         delete[] newGrid;
+
         clear();
         rows = cols = 0;
         return;
@@ -118,6 +117,7 @@ int main() {
 
   string line;
   while (getline(cin, line)) {
+    if (!line.empty() && line.back() == '\r') line.pop_back();
     // commands are only 's' and 'p' (possibly combined like "spsp")
     for (char ch : line) {
       if (ch == 's') b.step();
